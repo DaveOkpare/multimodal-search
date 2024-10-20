@@ -26,3 +26,23 @@ def get_access_token(credentials: Credential, headers: dict) -> str:
 def fetch_data(subreddit: str, filter_by: Literal["hot", "new", "top"], headers: dict) -> list:
     res = requests.get(f'https://oauth.reddit.com/r/{subreddit}/{filter_by}', headers=headers)
     return res.json()['data']['children']
+
+
+def extract_reddit_post_info(posts: list):
+    def build_output(data):
+        output = {
+            "title": data["title"],
+            "selftext": data["selftext"],
+            "permalink": "https://reddit.com" + data["permalink"],
+        }
+        
+        if "post_hint" in data:
+            output["image_url"] = data["url"]
+        elif "is_gallery" in data:
+            output["gallery_url"] = data["url"]
+        else:
+            output["url"] = data["url"]
+
+        return output
+
+    return [build_output(post["data"]) for post in posts]

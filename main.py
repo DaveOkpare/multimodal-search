@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 from embed_ingest_utils import (
     embed_and_store_post,
     initialize_model,
-    search_posts,
     setup_qdrant_client,
 )
 from fetch_reddit_posts import (
@@ -41,8 +40,10 @@ def main():
     model = initialize_model()
     client = setup_qdrant_client()
 
-    [embed_and_store_post(client, model, post) for post in extract_reddit_post_info(data)]
-    print(search_posts(client, model, "car on fire"))
+    [
+        embed_and_store_post(client, model, post)
+        for post in extract_reddit_post_info(data)
+    ]
 
 
 if __name__ == "__main__":

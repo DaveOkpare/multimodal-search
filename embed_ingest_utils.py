@@ -1,3 +1,4 @@
+import os
 import uuid
 from transformers import AutoModel
 from qdrant_client import QdrantClient
@@ -14,7 +15,7 @@ def initialize_model():
 
 
 def setup_qdrant_client():
-    client = QdrantClient(url="http://localhost:6333")
+    client = QdrantClient(host=os.getenv("QDRANT_HOST"), port=os.getenv("QDRANT_PORT"))
     if not client.collection_exists(COLLECTION_NAME):
         try:
             client.create_collection(

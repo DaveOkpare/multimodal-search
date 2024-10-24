@@ -12,6 +12,10 @@ ENV STREAMLIT_SERVER_PORT=8501
 ENV STREAMLIT_SERVER_ADDRESS=0.0.0.0
 ENV STREAMLIT_ENABLE_TELEMETRY=false
 
+# Set default Qdrant connection variables
+ENV QDRANT_HOST=localhost
+ENV QDRANT_PORT=6333
+
 WORKDIR /app
 
 # Install necessary dependencies
@@ -22,19 +26,29 @@ RUN apt-get update && apt-get install -y \
     && apt-get remove -y build-essential software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
-# Add a non-privileged user for security
+# Create a non-privileged user with a proper home directory
 ARG UID=10001
-RUN adduser \
+RUN mkdir -p /home/appuser && \
+    adduser \
     --disabled-password \
     --gecos "" \
-    --home "/nonexistent" \
+    --home "/home/appuser" \
     --shell "/sbin/nologin" \
-    --no-create-home \
     --uid "${UID}" \
-    appuser
+    appuser && \
+    chown -R appuser:appuser /home/appuser
+
+# Set environment variable for the cache directory
+ENV HF_HOME=/home/appuser/huggingface
+ENV TRANSFORMERS_CACHE=/home/appuser/huggingface
+ENV XDG_CACHE_HOME=/home/appuser/cache
+
+# Create and set permissions for cache directories
+RUN mkdir -p /home/appuser/huggingface /home/appuser/cache && \
+    chown -R appuser:appuser /home/appuser/huggingface /home/appuser/cache
 
 # Copy the application files into the container
-COPY . .
+COPY --chown=appuser:appuser . .
 
 # Install dependencies, avoiding cache to keep image small
 RUN --mount=type=cache,target=/root/.cache/pip \

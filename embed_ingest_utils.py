@@ -15,7 +15,7 @@ def initialize_model():
 
 
 def setup_qdrant_client():
-    client = QdrantClient(host=os.getenv("QDRANT_HOST"), port=os.getenv("QDRANT_PORT"))
+    client = QdrantClient(url=f"http://{os.getenv("QDRANT_HOST")}:{os.getenv("QDRANT_PORT")}")
     if not client.collection_exists(COLLECTION_NAME):
         try:
             client.create_collection(
@@ -23,7 +23,7 @@ def setup_qdrant_client():
                 vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.DOT),
             )
         except ApiException as e:
-            print(f"Error creating collection: {e.content}")
+            print(f"Error creating collection: {e}")
     return client
 
 
@@ -56,7 +56,7 @@ def embed_and_store_post(client, model, post):
         print(f"Post embedded and stored: {operation_info}")
         return operation_info
     except ApiException as e:
-        print(f"Error storing post: {e.content}")
+        print(f"Error storing post: {e}")
         return None
 
 
@@ -72,5 +72,5 @@ def search_posts(client, model, query, limit=3):
         ).points
         return search_results
     except ApiException as e:
-        print(f"Error searching posts: {e.content}")
+        print(f"Error searching posts: {e}")
         return []

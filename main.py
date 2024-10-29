@@ -36,7 +36,7 @@ headers = {**headers, **{"Authorization": f"bearer {token}"}}
 data = fetch_data(subreddit="pics", filter_by="hot", headers=headers)
 
 
-def main():
+def process_and_store_reddit_posts():
     model = initialize_model()
     client = setup_qdrant_client()
 
@@ -45,6 +45,8 @@ def main():
         for post in extract_reddit_post_info(data)
     ]
 
+    return model, client
+
 
 if __name__ == "__main__":
-    main()
+    process_and_store_reddit_posts()

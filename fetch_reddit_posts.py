@@ -32,10 +32,10 @@ def get_access_token(credentials: Credential, headers: dict) -> str:
 
 
 def fetch_data(
-    subreddit: str, filter_by: Literal["hot", "new", "top"], headers: dict
+    subreddit: str, filter_by: Literal["hot", "new", "top"], headers: dict, limit: int = 100
 ) -> list:
     res = requests.get(
-        f"https://oauth.reddit.com/r/{subreddit}/{filter_by}", headers=headers
+        f"https://oauth.reddit.com/r/{subreddit}/{filter_by}?limit={str(limit)}", headers=headers
     )
     return res.json()["data"]["children"]
 

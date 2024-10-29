@@ -1,6 +1,7 @@
 import streamlit as st
 
-from embed_ingest_utils import initialize_model, search_posts, setup_qdrant_client
+from embed_ingest_utils import search_posts
+from main import process_and_store_reddit_posts
 
 
 def app():
@@ -17,10 +18,9 @@ def app():
         value=(3),
     )
 
-    model = initialize_model()
-    client = setup_qdrant_client()
+    model, client = process_and_store_reddit_posts()
 
-    if st.button("SEARCH"):
+    if st.button("Search"):
         output_data = search_posts(client, model, input_text, post_limit)
         show_results(output_data, input_text)
 

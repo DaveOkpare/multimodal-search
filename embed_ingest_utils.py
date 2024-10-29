@@ -8,6 +8,12 @@ from qdrant_client.http.exceptions import ApiException
 EMBEDDING_MODEL = "jinaai/jina-clip-v1"
 COLLECTION_NAME = "reddit"
 VECTOR_SIZE = 768
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", None)
+
+QDRANT_CREDENTIALS = {"url": os.getenv("QDRANT_URL")}
+
+if QDRANT_API_KEY:
+    QDRANT_CREDENTIALS["api_key"] = QDRANT_API_KEY
 
 
 def initialize_model():
@@ -15,7 +21,7 @@ def initialize_model():
 
 
 def setup_qdrant_client():
-    client = QdrantClient(url=f"http://{os.getenv("QDRANT_HOST")}:{os.getenv("QDRANT_PORT")}")
+    client = QdrantClient(**QDRANT_CREDENTIALS)
     if not client.collection_exists(COLLECTION_NAME):
         try:
             client.create_collection(

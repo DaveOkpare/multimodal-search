@@ -40,10 +40,10 @@ def process_and_store_reddit_posts():
     model = initialize_model()
     client = setup_qdrant_client()
 
-    [
-        embed_and_store_post(client, model, post)
-        for post in extract_reddit_post_info(data)
-    ]
+    # [
+    #     embed_and_store_post(client, model, post)
+    #     for post in extract_reddit_post_info(data)
+    # ]
 
     return model, client
 

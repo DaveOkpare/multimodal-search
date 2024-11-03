@@ -53,7 +53,7 @@ REDDIT_SECRET_KEY=your_secret_key
 REDDIT_USERNAME=your_username
 REDDIT_PASSWORD=your_password
 QDRANT_URL=your_qdrant_url
-QDRANT_API_KEY=your_qdrant_api_key
+QDRANT_API_KEY=your_qdrant_api_key # optional in local instance
 ```
 
 ### Installation

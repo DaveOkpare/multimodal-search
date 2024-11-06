@@ -18,12 +18,9 @@ ENV QDRANT_PORT=6333
 
 WORKDIR /app
 
-# Install necessary dependencies
+# Only install curl for healthcheck
 RUN apt-get update && apt-get install -y \
-    build-essential \
     curl \
-    software-properties-common \
-    && apt-get remove -y build-essential software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a non-privileged user with a proper home directory

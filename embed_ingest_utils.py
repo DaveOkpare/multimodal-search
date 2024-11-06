@@ -30,7 +30,7 @@ def setup_qdrant_client():
         try:
             client.create_collection(
                 collection_name=COLLECTION_NAME,
-                vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.DOT),
+                vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE),
             )
         except ApiException as e:
             print(f"Error creating collection: {e}")
